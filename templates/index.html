@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>📡 Network Monitoring Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #dfe9f3, #ffffff);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.6rem 0;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+
+        .bottleneck {
+            background-color: #0984e3;
+        }
+
+        .bottleneck:hover {
+            background-color: #0652dd;
+        }
+
+        .attacks {
+            background-color: #d63031;
+        }
+
+        .attacks:hover {
+            background-color: #b61827;
+        }
+
+        .footer {
+            margin-top: 1.2rem;
+            font-size: 0.8rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📶 Network Traffic Monitor</h1>
+        <a href="{{ url_for('bottlenecks') }}" class="button bottleneck">View Bottlenecks</a>
+        <a href="{{ url_for('attacks') }}" class="button attacks">Detect Attacks</a>
+        <div class="footer">🛡️ Real-time insights at a glance</div>
+    </div>
+</body>
+</html>
