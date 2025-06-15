@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flood Attack Panel</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 30px;
+            color: #2d3436;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        form input {
+            display: block;
+            width: 100%;
+            padding: 14px 16px;
+            margin: 12px 0;
+            font-size: 16px;
+            border: 1px solid #dfe6e9;
+            border-radius: 10px;
+            transition: border 0.3s;
+        }
+
+        form input:focus {
+            outline: none;
+            border-color: #0984e3;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            font-size: 17px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(to right, #0984e3, #6c5ce7);
+            cursor: pointer;
+            margin-top: 16px;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #d63031, #e17055);
+            transform: translateY(-2px);
+        }
+
+        .stop {
+            background: linear-gradient(to right, #d63031, #e17055);
+        }
+
+        .stop:hover {
+            background: linear-gradient(to right, #c0392b, #ff7675);
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .logs-section {
+            margin-top: 40px;
+        }
+
+        .logs-section h2 {
+            font-size: 20px;
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        #log-box {
+            background-color: #1e1e2f;
+            color: #e5e5e5;
+            padding: 18px;
+            border-radius: 10px;
+            font-family: monospace;
+            height: 320px;
+            overflow-y: scroll;
+            border: 1px solid #444;
+            white-space: pre-wrap;
+        }
+
+        @media screen and (max-width: 700px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Denial Of Service Attack</h1>
+
+        <form method="POST">
+            <input name="ip" type="text" placeholder="Target IP" value="{{ info.ip or '127.0.0.1' }}" required>
+            <input name="port" type="number" placeholder="Port" value="{{ info.port or 8080 }}" required>
+            <input name="threads" type="number" placeholder="Number of Threads" value="{{ info.threads or 100 }}" required>
+
+            {% if info.running %}
+                <button class="stop" name="action" value="stop">🛑 Stop Attack</button>
+            {% else %}
+                <button name="action" value="start">🚀 Start Attack</button>
+            {% endif %}
+        </form>
+
+        <div class="status" style="color: {{ 'red' if info.running else 'green' }}">
+            {% if info.running %}
+                ✅ Attack running on {{ info.ip }}:{{ info.port }} with {{ info.threads }} threads
+            {% else %}
+                ⚠️ No active attack
+            {% endif %}
+        </div>
+
+        <div class="logs-section">
+            <h2>📜 Live Logs</h2>
+            <div id="log-box"><i>Waiting for logs...</i></div>
+        </div>
+    </div>
+
+    <script>
+        function fetchLogs() {
+    const logBox = document.getElementById("log-box");
+    const isAtBottom = logBox.scrollHeight - logBox.scrollTop <= logBox.clientHeight + 10;
+
+    fetch('/attacks/floods/logs')
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+                logBox.innerHTML = data.map(line => `<div>${line}</div>`).join('');
+
+                // Only scroll to bottom if user was already at the bottom
+                if (isAtBottom) {
+                    logBox.scrollTop = logBox.scrollHeight;
+                }
+            } else {
+                logBox.innerHTML = "<i>No logs yet...</i>";
+            }
+        })
+        .catch(err => {
+            console.error("Log fetch error:", err);
+            logBox.innerHTML = "<i>Failed to load logs.</i>";
+        });
+}
+
+
+
+        setInterval(fetchLogs, 1000);
+        window.onload = fetchLogs;
+    </script>
+</body>
+</html>

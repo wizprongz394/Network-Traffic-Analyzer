@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attack Options</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #e3f2fd, #fefefe);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2d3436;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: block;
+            margin: 15px 0;
+            padding: 18px 30px;
+            width: 320px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(to right, #0984e3, #6c5ce7);
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(to right, #d63031, #e17055);
+            transform: translateY(-3px);
+        }
+
+        .coming-soon {
+            background: linear-gradient(to right, #b2bec3, #636e72);
+            cursor: not-allowed;
+        }
+
+        .coming-soon:hover {
+            background: linear-gradient(to right, #b2bec3, #636e72);
+            transform: none;
+        }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 14px;
+            color: #636e72;
+        }
+    </style>
+</head>
+<body>
+    <h1>⚠️ Select an Attack Type</h1>
+
+    <form action="/attacks/floods" method="get">
+        <button class="btn">🌊 Denial of Service Attack</button>
+    </form>
+
+    <form action="#" method="get">
+        <button class="btn coming-soon" disabled>🕵️ Man-in-the-Middle (Coming Soon)</button>
+    </form>
+
+    <form action="#" method="get">
+        <button class="btn coming-soon" disabled>💉 SQL Injection (Coming Soon)</button>
+    </form>
+
+    <div class="footer">
+        Built for educational & demonstration purposes only 🔬
+    </div>
+</body>
+</html>
