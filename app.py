@@ -47,7 +47,7 @@ def bottlenecks():
 
 @app.route("/attacks")
 def attacks():
-    return "<h1>🚧 Attack detection module coming soon!</h1>"
+    return render_template("attacks.html")
 
 if __name__ == "__main__":
     print("✅ Flask app is starting...")
