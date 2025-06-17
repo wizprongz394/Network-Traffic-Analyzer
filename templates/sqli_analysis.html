@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Injection PCAP Analysis</title>
+    <style>
+        body { font-family: Arial; padding: 30px; }
+        .payload { background: #f1f1f1; padding: 10px; margin-bottom: 15px; border-left: 4px solid #d63031; }
+    </style>
+</head>
+<body>
+    <h2>🔍 Analyze SQL Injection in PCAP</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="pcap_file" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if findings %}
+        <h3>{{ findings|length }} suspicious queries found:</h3>
+        <div>
+            {% for item in findings %}
+                <div class="payload">
+                    <strong>From:</strong> {{ item.src }}<br>
+                    <pre>{{ item.payload }}</pre>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif request.method == 'POST' %}
+        <p>No suspicious queries found.</p>
+    {% endif %}
+</body>
+</html>

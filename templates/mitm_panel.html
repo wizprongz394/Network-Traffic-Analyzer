@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MITM Attack Panel</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #f5f7fa, #dfe6e9);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #2d3436;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input, button {
+            padding: 12px 15px;
+            margin: 10px 0;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        button {
+            background-color: #00b894;
+            color: white;
+            font-weight: bold;
+            border: none;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00cec9;
+        }
+
+        .stop-btn {
+            background-color: #d63031;
+        }
+
+        .stop-btn:hover {
+            background-color: #ff7675;
+        }
+
+        .status {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        #log-box {
+            margin-top: 30px;
+            background-color: #1e1e2f;
+            color: #e5e5e5;
+            padding: 20px;
+            border-radius: 8px;
+            height: 300px;
+            overflow-y: scroll;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🕵️ Man-in-the-Middle Attack</h1>
+
+    <form method="POST">
+        <input type="text" name="target_ip" placeholder="Target IP (e.g. 192.168.0.100)" required>
+        <input type="text" name="target_mac" placeholder="Target MAC (e.g. 4e:3d:ea:b2:bc:e7)" required>
+        <input type="text" name="gateway_ip" placeholder="Gateway IP (e.g. 192.168.0.1)" required>
+        <input type="text" name="gateway_mac" placeholder="Gateway MAC (e.g. 98:de:d0:ce:f1:2a)" required>
+
+        <button type="submit" name="action" value="start">🚀 Start MITM Attack</button>
+        <button type="submit" name="action" value="stop" class="stop-btn">🛑 Stop Attack</button>
+    </form>
+
+    <div class="status">
+        {% if status %}
+            ✅ MITM Attack is running...
+        {% else %}
+            ⚠️ No MITM attack in progress.
+        {% endif %}
+    </div>
+
+    <div id="log-box"><i>Fetching MITM logs...</i></div>
+</div>
+
+<script>
+    function fetchLogs() {
+        fetch('/attacks/mitm/logs')
+            .then(response => response.json())
+            .then(data => {
+                const logBox = document.getElementById('log-box');
+                if (Array.isArray(data) && data.length > 0) {
+                    const previousScroll = logBox.scrollTop;
+                    const atBottom = logBox.scrollHeight - logBox.scrollTop === logBox.clientHeight;
+
+                    logBox.innerHTML = data.map(line => `<div>${line}</div>`).join('');
+                    if (atBottom) {
+                        logBox.scrollTop = logBox.scrollHeight;
+                    }
+                } else {
+                    logBox.innerHTML = "<i>No logs yet...</i>";
+                }
+            })
+            .catch(() => {
+                document.getElementById("log-box").innerHTML = "<i>Failed to load logs.</i>";
+            });
+    }
+
+    setInterval(fetchLogs, 1000);
+    window.onload = fetchLogs;
+</script>
+</body>
+</html>
